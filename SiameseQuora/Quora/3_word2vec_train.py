@@ -14,7 +14,7 @@ from tqdm import tqdm
 # LOAD DATA
 ##############################################################################
 
-df = pd.read_csv("/media/eightbit/8bit_5tb/NLP_data/Quora/DuplicateQuestion/quora_duplicate_questions.tsv",delimiter='\t')
+df = pd.read_csv("quora_duplicate_questions.tsv",delimiter='\t')
 
 # encode questions to unicode
 df['question1'] = df['question1'].apply(lambda x: unicode(str(x),"utf-8"))
@@ -25,8 +25,8 @@ df['question2'] = df['question2'].apply(lambda x: unicode(str(x),"utf-8"))
 ##############################################################################
 import gensim
 
-if os.path.exists('data/3_word2vec.mdl'):
-    model = gensim.models.Word2Vec.load_word2vec_format('data/3_word2vec.bin', binary=True)
+if os.path.exists('3_word2vec.mdl'):
+    model = gensim.models.Word2Vec.load_word2vec_format('3_word2vec.bin', binary=True)
     # trim memory
     model.init_sims(replace=True)
     # creta a dict 
@@ -52,8 +52,8 @@ else:
     print "Number of tokens in Word2Vec:", len(w2v.keys())
     
     # save model
-    model.save('data/3_word2vec.mdl')
-    model.save_word2vec_format('data/3_word2vec.bin', binary=True)
+    model.save('3_word2vec.mdl')
+    model.save_word2vec_format('3_word2vec.bin', binary=True)
     del questions
     
 ##############################################################################
@@ -61,8 +61,8 @@ else:
 ##############################################################################
 from utils import MeanEmbeddingVectorizer, TfidfEmbeddingVectorizer
 
-if os.path.exists('data/3_df.pkl'):
-    df = pd.read_pickle('data/3_df.pkl')
+if os.path.exists('3_df.pkl'):
+    df = pd.read_pickle('3_df.pkl')
 else:
     # gather all questions
     questions = list(df['question1']) + list(df['question2'])
@@ -84,7 +84,7 @@ else:
     df['q2_feats'] = list(vecs2)
     
     # save features
-    pd.to_pickle(df, 'data/3_df.pkl')
+    pd.to_pickle(df, '3_df.pkl')
 
 ##############################################################################
 # CREATE TRAIN DATA
@@ -159,3 +159,7 @@ for epoch in range(50):
     
 #    print('* Accuracy on training set: %0.2f%%' % (100 * tr_acc))
     print('* Accuracy on test set: %0.2f%%' % (100 * te_acc))
+
+# save model
+net.save('final_word2vec.h5')
+

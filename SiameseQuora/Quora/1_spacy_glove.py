@@ -14,14 +14,14 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-df = pd.read_csv("/media/eightbit/8bit_5tb/NLP_data/Quora/DuplicateQuestion/quora_duplicate_questions.tsv",delimiter='\t')
+df = pd.read_csv("quora_duplicate_questions.tsv",delimiter='\t')
 
 # encode questions to unicode
 df['question1'] = df['question1'].apply(lambda x: unicode(str(x),"utf-8"))
 df['question2'] = df['question2'].apply(lambda x: unicode(str(x),"utf-8"))
 
-if os.path.exists('data/1_df.pkl'):
-    df = pd.read_pickle('data/1_df.pkl')
+if os.path.exists('1_df.pkl'):
+    df = pd.read_pickle('1_df.pkl')
 else:
     # exctract word2vec vectors
     import spacy
@@ -36,7 +36,7 @@ else:
     df['q2_feats'] = list(vecs2)
 
     # save features
-    pd.to_pickle(df, 'data/1_df.pkl')
+    pd.to_pickle(df, '1_df.pkl')
     
 from scipy.spatial.distance import euclidean
 vec1 = df[df['qid1']==97]['q1_feats'].values
@@ -129,3 +129,4 @@ for epoch in range(50):
     
 #    print('* Accuracy on training set: %0.2f%%' % (100 * tr_acc))
     print('* Accuracy on test set: %0.2f%%' % (100 * te_acc))
+net.save('final_spacy_glove.h5')

@@ -14,7 +14,7 @@ from tqdm import tqdm
 # LOAD DATA
 ##############################################################################
 
-df = pd.read_csv("/media/eightbit/8bit_5tb/NLP_data/Quora/DuplicateQuestion/quora_duplicate_questions.tsv",delimiter='\t')
+df = pd.read_csv("quora_duplicate_questions.tsv",delimiter='\t')
 
 # print simple stats
 print("number of rows (question pairs): %i"%(df.shape[0]))
@@ -45,8 +45,8 @@ del questions
 ##############################################################################
 # WORD2VEC
 ##############################################################################
-if os.path.exists('data/2_word2vec_tfidf.pkl'):
-    df = pd.read_pickle('data/2_word2vec_tfidf.pkl')
+if os.path.exists('2_word2vec_tfidf.pkl'):
+    df = pd.read_pickle('2_word2vec_tfidf.pkl')
 else:
     # exctract word2vec vectors
     import spacy
@@ -63,12 +63,13 @@ else:
             try:
                 idf = word2tfidf[str(word)]
             except:
-                #print word
+                print word
                 idf = 0
             # compute final vec
             mean_vec += vec * idf
         mean_vec = mean_vec.mean(axis=0)
         vecs1.append(mean_vec)
+    print(list(vecs1))
     df['q1_feats'] = list(vecs1)
     
     vecs2 = []
@@ -91,7 +92,7 @@ else:
     df['q2_feats'] = list(vecs2)
 
     # save features
-    pd.to_pickle(df, 'data/2_word2vec_tfidf.pkl')
+    pd.to_pickle(df, '2_word2vec_tfidf.pkl')
 
 ##############################################################################
 # CREATE TRAIN DATA
@@ -126,6 +127,7 @@ Y_train = df[:num_train]['is_duplicate'].values
 X_test[:,0,:] = q1_feats[num_train:]
 X_test[:,1,:] = q2_feats[num_train:]
 Y_test = df[num_train:]['is_duplicate'].values
+
 
 # remove useless variables
 del b
@@ -169,13 +171,15 @@ optimizer = Adam(lr=0.001)
 net.compile(loss=contrastive_loss, optimizer=optimizer)
 
 for epoch in range(50):
-    net.fit([X_train_norm[:,0,:], X_train_norm[:,1,:]], Y_train,
-          validation_data=([X_test_norm[:,0,:], X_test_norm[:,1,:]], Y_test),
+    net.fit([X_train[:,0,:], X_train[:,1,:]], Y_train,
+          validation_data=([X_test[:,0,:], X_test[:,1,:]], Y_test),
           batch_size=128, nb_epoch=1, shuffle=True, )
     
     # compute final accuracy on training and test sets
-    pred = net.predict([X_test_norm[:,0,:], X_test_norm[:,1,:]], batch_size=128)
+
+    pred = net.predict([X_test[:,0,:], X_test[:,1,:]], batch_size=128)
     te_acc = compute_accuracy(pred, Y_test)
     
 #    print('* Accuracy on training set: %0.2f%%' % (100 * tr_acc))
     print('* Accuracy on test set: %0.2f%%' % (100 * te_acc))
+net.save('final_tf_idf_vec.h5')

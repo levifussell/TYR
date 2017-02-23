@@ -2,6 +2,8 @@
 from __future__ import print_function
 import httplib2
 import os
+import numpy as np
+import pandas as pd
 
 from apiclient import discovery
 from oauth2client import client
@@ -79,6 +81,8 @@ def main():
         # spreadsheetId=spreadsheetId, range='Sheet1!A').execute()
     # print(result2) 
     values = result.get('values', [])
+    df = pd.DataFrame({'question':values,'score':0})
+    df.to_csv('test.csv')
 
     if not values:
         print('No data found.')
