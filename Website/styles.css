@@ -1,10 +1,21 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,200);
 
 body {
-	color: #FFF;
+    color: #FFF;
 	font: 1.4em/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	background-color:#ccc;
+    background-color:#ccc;
+    overflow: hidden;
+    margin: 0;
 }
+
+/*canvas[resize] {*/
+    /*[>position: absolute;<]*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*[>top: 0;<]*/
+    /*[>left: 0;<]*/
+    /*[>z-index: 0;<]*/
+/*}*/
 
 img {
 	display: block;
@@ -28,15 +39,67 @@ img {
 	padding-right: 40px;
 }
 .pagewrap{
-	padding: 40px 20px;
+    padding: 40px 0px;
 	margin: 0 auto;
-	width: 80%;
-	background-color: #ddd;
-	height:750px;
-	background-image: url("a.jpg");
+	width: 50%;
+    float: left;
+    background-color: #ddd;
+	height:60vh;
+    background-image: url("a.jpg");
 	overflow-y:scroll;
-	max-height:750px;	
+    display: inline-block;
+	/*max-height:750px;	*/
 }
+
+#canvas-wrap canvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*z-index: 0;*/
+    float: right;
+}
+
+#canvas-wrap {
+    position: relative;
+    width: 40%;
+    height: 100%;
+    z-index: 0;
+    float: right;
+}
+
+#overlay {
+    position: absolute;
+    height: 100%;
+    /*z-index: 1;*/
+}
+
+
+/*.leaderboardTitle{*/
+    /*[>padding: 40px 0px;<]*/
+	/*[>margin: 0 auto;<]*/
+    /*height: 5%;*/
+	/*width: 30%;*/
+    /*float: left;*/
+	/*background-color: #ddd;*/
+	/*[>background-image: url("a.jpg");<]*/
+	/*[>overflow-y:scroll;<]*/
+    /*float: right, top;*/
+/*}*/
+.leaderboard{
+    padding: 40px 10px;
+    margin: 10px 10px;
+    width: 42%;
+    background-color: #ddd;
+    height:400px;
+    float: right;
+    /*z-index: 1;*/
+    /*[>background-image: url("a.jpg");<]*/
+    /*[>overflow-y:scroll;<]*/
+    /*float: right;*/
+}
+*{border:1px dashed blue;}
 
 .container {
 	padding: 40px 20px;
@@ -65,6 +128,7 @@ img {
 }
 
 .button {
+    float: left;
 	display: inline-block;
 	font-size: 24px;
 	cursor: pointer;
@@ -105,10 +169,10 @@ img {
 	box-sizing: border-box;
 	clear: both;
 	float: left;
-	margin-left: 10%;
+	/*margin-left: 10%;*/
 	padding: 8px 30px;
 	position: relative;
-	width: 70%;
+	width: 40%;
 	max-width: 100%;
 	word-wrap: break-word;
 	height:50px;

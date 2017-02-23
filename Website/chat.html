@@ -3,16 +3,34 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="styles.css">
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="js/processing.min.js"></script>
+        <!--<script type="text/javascript" src="js/mainJS.js"></script>-->
 	</head>
 	<body>
+        <!--<canvas id="myCanvas" resize="true"></canvas>-->
+
 		<div class="header">
 			TIME2TALK
 			<a class='number'>+44087668865</a>
 		</div>
-		<div class="pagewrap" id="hello">
-			<div class="container" id="cont1">	
-			</div>	
-		</div>
+
+        <!--<div class="leaderboardTitle">-->
+            <!--Top Queries:-->
+        <!--</div>-->
+        <div class="big">
+            <div class="pagewrap" id="hello">
+                <div class="container" id="cont1">	
+                </div>	
+            </div>
+
+            <div class="leaderboard">
+                <canvas data-processing-sources="mainPDE.pde"></canvas>
+                <div id="overlay">
+                PUT LIST HERE
+                </div>
+            </div>
+        </div>
+
 		<script type="text/javascript">	
 		$(document).ready(function(){
 					var count = 0;
@@ -55,6 +73,7 @@
 			
 		 });
 		</script>
+
 		<div id ="form">
 			<textarea class='textbox1' name="myTextBox" id="yepyep" >
 			</textarea>
