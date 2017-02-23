@@ -17,15 +17,15 @@ if os.path.exists('final_tf_idf_vec.h5'):
 		raw_question = pd.read_csv("raw_question.tsv",delimiter = '\t')
 
 		if os.path.exists('current_question.tsv'):
-			current_question = pd.read_csv("current_question.tsv",delimiter = '\t')
+			current_question = pd.read_csv("current_question.tsv",delimiter = ',')
 
 			combine_question = pd.concat([current_question,raw_question])
 
-			print(current_question['question'])
-			#print(combine_question)
+			print(raw_question)
+			print(current_question)
 
-			raw_question['question'] = raw_question['question'].apply(lambda x: unicode(str(x),"utf-8"))
-			current_question['question'] = current_question['question'].apply(lambda x: unicode(str(x),"utf-8"))
+			print(combine_question)
+
 			combine_question['question'] = combine_question['question'].apply(lambda x: unicode(str(x),"utf-8"))
 
 			questions = list(current_question['question']) + list(raw_question['question'])
@@ -35,35 +35,6 @@ if os.path.exists('final_tf_idf_vec.h5'):
 
 			word2tfidf = dict(zip(tfidf.get_feature_names(),tfidf.idf_))
 
-			vecs1 = []
-			for qu in tqdm(list(raw_question['question'])):
-				doc = nlp(qu)
-				mean_vec = np.zeros([len(doc),300])
-				for word in doc:
-					vec = word.vector
-					try:
-						idf = word2tfidf[str(word)]
-					except:
-						idf = 0
-					mean_vec += vec * idf
-				mean_vec = mean_vec.mean(axis=0)
-				vecs1.append(mean_vec)
-			raw_question['q1_feats'] = list(vecs1)
-
-			vecs2 = []
-			for qu in tqdm(list(current_question['question'])):
-				doc = nlp(qu)
-				mean_vec = np.zeros([len(doc),300])
-				for word in doc:
-					vec = word.vector
-					try:
-						idf = word2tfidf[str(word)]
-					except:
-						idf = 0
-					mean_vec += vec * idf
-				mean_vec = mean_vec.mean(axis=0)
-				vecs2.append(mean_vec)
-			current_question['q1_feats'] = list(vecs2)
 
 			vecs3 = []
 			for qu in tqdm(list(combine_question['question'])):
@@ -78,17 +49,7 @@ if os.path.exists('final_tf_idf_vec.h5'):
 					mean_vec += vec * idf
 				mean_vec = mean_vec.mean(axis=0)
 				vecs3.append(mean_vec)
-			combine_question['q1_feats'] = list(vecs1)
-
-			b = [a[None,:] for a in list(raw_question['q1_feats'].values)]
-			q1_feats = np.concatenate(b, axis=0)
-			raw_question_vec = np.zeros([raw_question.shape[0],2,300])
-			raw_question_vec[:,0,:] = q1_feats
-
-			b = [a[None,:] for a in list(current_question['q1_feats'].values)]
-			q2_feats = np.concatenate(b, axis=0)
-			current_question_vec = np.zeros([current_question.shape[0],2,300])
-			current_question_vec[:,0,:] = q2_feats
+			combine_question['q1_feats'] = list(vecs3)
 
 			b = [a[None,:] for a in list(combine_question['q1_feats'].values)]
 			q3_feats = np.concatenate(b, axis=0)
@@ -120,11 +81,17 @@ if os.path.exists('final_tf_idf_vec.h5'):
 					if j != n:
 						question_route[j] = []
 						score +=1
-				score_list.append(score)
-				question_list.append(combine_question['question'][n])
+					else:
+						continue
+				if not i :
+					continue
+				else:
+					score_list.append(score)
+					question_list.append(combine_question['question'].values[n])
 				score = 0
 			df = pd.DataFrame({'question':question_list,'score':score_list})
 			df.to_csv('current_question.tsv')
+			sys.exit(0)
 
 
 		else:
@@ -194,11 +161,17 @@ if os.path.exists('final_tf_idf_vec.h5'):
     				if j != n:
     					question_route[j] = []
     					score +=1
-    			score_list.append(score)
-    			question_list.append(raw_question['question'][n])
+    				else:
+    					continue
+    			if not i:
+    				continue
+    			else:
+    				score_list.append(score)
+    				question_list.append(raw_question['question'][n])
     			score = 0
     		df = pd.DataFrame({'question':question_list,'score':score_list})
     		df.to_csv('current_question.tsv')
+    		sys.exit(0)
 
 	else:
 		print("No raw data file is found")
