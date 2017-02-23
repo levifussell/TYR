@@ -63,13 +63,12 @@ else:
             try:
                 idf = word2tfidf[str(word)]
             except:
-                print word
+                #print word
                 idf = 0
             # compute final vec
             mean_vec += vec * idf
         mean_vec = mean_vec.mean(axis=0)
         vecs1.append(mean_vec)
-    print(list(vecs1))
     df['q1_feats'] = list(vecs1)
     
     vecs2 = []
@@ -83,7 +82,7 @@ else:
             try:
                 idf = word2tfidf[str(word)]
             except:
-                print word
+                #print word
                 idf = 0
             # compute final vec
             mean_vec += vec * idf
