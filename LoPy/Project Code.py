@@ -32,14 +32,17 @@ import os
 from machine import Timer
 
 
-# ultrasonic sensor
+# this class is used to setup and interface with an ultrasonic sensor
+# distance function has been reworked to respond true when distance of the object
+# in front within the MAX_DIST threshold and false if the object is outside that range
 class HCSR04:
     def __init__(self, trigger, echo):
         # Anything over 400 cm (23200 us pulse) is "out of range"
         self.MAX_DIST = 23200
         self._trigger = Pin(trigger, mode=Pin.OUT, value=0)
         self._echo = Pin(echo, mode=Pin.IN)
-
+	
+	# call to see if person is within threshold distance of sensor
     def distance(self):
         # Hold the trigger pin high for at least 10 us
         self._trigger(1)
@@ -62,6 +65,7 @@ class HCSR04:
         # in the datasheet, and calculated from the assumed speed
         # of sound in air at sea level (~340 m/s).
         # cm = pulse_width / 58.0;
+        # this calculation is not needed
 
         # return the results
         if pulse_width > self.MAX_DIST:
@@ -70,7 +74,10 @@ class HCSR04:
             return True
 
 
-# door for counter
+# Pass counter object setup for sensor used to record when a pass is completed from the right or left and
+# the time spent in front of the sensor. Records are made in a CSV file stored in the root directory of an SD card 
+# present in the device. Also includes functionality to send the contents of the data file over the network or delete
+# the contents from the filing system. Can chose to send only data 
 class Pass_Count:
     def __init__(self, ident):
     	# only six sensors registered check the setup identifier is one of these
@@ -105,7 +112,9 @@ class Pass_Count:
         # write timecode, time in front of sensors, set right pass value to 0, and set left pass value to 1
         self.f.write(
             "{0},{1},{2},{3},{4}".format(str(time.time()), self.ident, str(count), str(0), str(1)))
-
+	
+	# call this to send file over the network
+	# sends the entire content of CSV file
     def send_file(self):
         # setup the networking
         nw = Lora_Network(self.ident)
@@ -130,6 +139,9 @@ class Pass_Count:
         # close the file
         f.close()
     
+    # call this to send the data contained in rows of the 
+    # CSV file in which time measured for pass is greater
+    # than the lower bound provided.
     def send_time_greater(self, lower_bound):
         # setup the networking
         nw = Lora_Network(self.ident)
@@ -154,7 +166,10 @@ class Pass_Count:
             nw.diconnect()
             # close the file
             f.close()
-    
+            
+    # call this to send the data contained in rows of the 
+    # CSV file in which time measured for pass is lower
+    # than the upper bound provided.
     def send_time_lower(self, upper_bound):
         # setup the networking
         nw = Lora_Network(self.ident)
@@ -180,6 +195,9 @@ class Pass_Count:
         	# close the file
         	f.close()
     
+    # call this to send the data contained in rows of the 
+    # CSV file in which time measured for pass is lower
+    # than the upper bound and greater than the lower bound.
     def send_time_between(self, lower_bound, upper_bound):
         # setup the networking
         nw = Lora_Network(self.ident)
@@ -205,6 +223,9 @@ class Pass_Count:
         	# close the file
         	f.close()
     
+    # call this to wipe all data stored in the CSV file
+    # use this function after transferring the desired data
+    # from the contents of the file.
     def wipe_data(self):
 		# close file if open
         self.f.close()
@@ -214,7 +235,8 @@ class Pass_Count:
         self.f = open('/sd/' + self.name + '.txt', 'w')
         # write the csv file head
         self.f.write('Timecode,Sensor_ID,Time_Stopped,Right_Pass,Left_Pass')
-
+	
+	# close file upon destruction of object
     def __del__(self):
         # close file on exiton exit
         self.f.close()
@@ -227,7 +249,7 @@ class Lora_Network:
             # ID Switcher based on board number
             # Six boards have been configured for use on the project
             if ident == 1:
-                # Sensor 1 Identification Strings
+                # Board 1 Identification Strings
                 AppEUI = '70 B3 D5 7E F0 00 3A 56'
                 AppID = 'team_dallas'
                 AppKey = 'B9 51 88 C7 6D A9 25 17 57 37 E6 31 DD 32 A8 D4'
@@ -235,7 +257,7 @@ class Lora_Network:
                 DevID = 'teamd1'
 
             elif ident == 2:
-            	# Sensor 2 Identification Strings
+            	# Board 2 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = '90 35 EF A3 C0 42 69 3B F0 D5 02 28 CB D3 DB 24'
@@ -243,7 +265,7 @@ class Lora_Network:
             	DevID = 'teamd2'
 
             elif self.ident == 3:
-            	# Sensor 3 Identification Strings
+            	# Board 3 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = '2F 47 1F 8F 0C AE 19 A1 1A 5B 23 23 63 38 E7 17'
@@ -251,7 +273,7 @@ class Lora_Network:
             	DevID = 'teamd3'
 
             elif self.ident == 4:
-            	# Sensor 4 Identification Strings
+            	# Board 4 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = '01 36 11 39 E6 6A D6 99 91 B9 62 36 B9 7C 07 EE'
@@ -259,7 +281,7 @@ class Lora_Network:
             	DevID = 'teamd4'
 
             elif self.ident == 5:
-            	# Sensor 5 Identification Strings
+            	# Board 5 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = 'F5 5D AF 7A 0E 87 07 37 77 B4 7B 4A D5 FA B1 8D'
@@ -267,7 +289,7 @@ class Lora_Network:
             	DevID = 'teamd5'
 
             else:
-                # Sensor 6 Identification Strings
+                # Board 6 Identification Strings
                 AppEUI = '70 B3 D5 7E F0 00 3A 56'
                 AppID = 'team_dallas'
                 AppKey = 'BB 93 34 AE 9B FB 8E D5 E3 07 21 7C 63 11 FE 8C'
@@ -297,17 +319,21 @@ class Lora_Network:
                 print("Error Connecting to Network!!")
         else:
             print("That's not a valid option! Only 6 network adapters!")
-
+	
+	# call to close socket connection with server
     def disconnect(self):
         # close network connection
         self.s.socket.close()
-
+	
+	# close network connection upon destruction of object
     def __del__(self):
         # close network connection
         self.s.socket.close()
 
 
-# Detect the number of passes
+# Create this object to detect the number of passes using the specific board
+# configuration with two ultrasonic sensors. Initialization is done by declaring
+# the sensor ID and the echo and trigger pins for the two ultrasonic sensors 
 class Pass_Detect:
     def __init__(self, IDENT, TRIGGER_1, ECHO_1, TRIGGER_2, ECHO_2):
         # Green Color
@@ -328,20 +354,26 @@ class Pass_Detect:
         pycom.rgbled(self.white)
 
 	# Use two ultrasonic sensor and determine which sensor gets activated first and based 
-	# on that value you can determine the number of people in the room.
+	# on that value you can determine from what size people have passes. A timer is also
+	# used starting from when an object is first detested to when it is no longer in view 
+	# from either of the sensors.
     def detect_pass(self):
+    	# continue to poll for data as quickly as possible
+    	# could include a time delay to give certain interval for
+    	# testing the distance calculation
         while True:
-            # left sensor detect
+            # left sensor detect distance first
             if self.hc_1.distance():
                 # start timer
                 self.chrono.start()
-                # coming from left
+                # check if subject in view from either distance sensors
                 while self.h_1.distance() or self.h_2.distance():
-                    # set light to green
+                    # set light to green shows person is still in view 
+                    # and the person has approached from the left
                     pycom.rgbled(self.green)
                 # stop the timer
                 self.chrono.stop()
-                # get the time
+                # get the time passed since detection
                 elapsed_time = int(self.chrono.read())
                 # record the time present and pass
                 self.pc.left(elapsed_time)
@@ -349,17 +381,18 @@ class Pass_Detect:
                 self.chrono.reset()
                 # set light to white
                 pycom.rgbled(self.white)
-            # right sensor detect
+            # right sensor detects distance first
             elif self.hc_2.distance():
                 # start timer
                 self.chrono.start()
-                # coming from right
+                # check if subject in view from either distance sensors
                 while self.h_1.distance() or self.h_2.distance():
-                    # set light to blue
+                    # set light to blue shows person is still in view 
+                    # and the person has approached from the right
                     pycom.rgbled(self.blue)
                 # stop the timer
                 self.chrono.stop()
-                # get the time
+                # get the time passed since detection
                 elapsed_time = int(self.chrono.read())
                 # record the time present and pass
                 self.pc.right(elapsed_time)
@@ -394,29 +427,31 @@ class Pass_Detect:
 # Creates the pass detector for board 1
 # 'P11','P12' are on the left
 # 'P10','P13' are on the right
-PD = Pass_Detect(1, 'P11', 'P12', 'P10', 'P13')
+## PD = Pass_Detect(1, 'P11', 'P12', 'P10', 'P13')
 
 # Determine the number of people passing by using two ultrasonic sensors
 # Run continuously and records the timestamp, pass id, 
 # time stopped, number of passes on right, and number of passes on left
-PD.detect_pass()
+## PD.detect_pass()
 
 # Send all data stored on card
-PD.send_data()
+## PD.send_data()
 
 # sends all data with wait times greater than 5 seconds
-PD.send_gt(5)
+## PD.send_gt(5)
 
 # sends all data with wait times less than 5 seconds
-PD.send_lt(5)
+## PD.send_lt(5)
 
 # sends all data with wait times between 5 seconds and 10 seconds
-PD.send_btw(5,10)
+## PD.send_btw(5,10)
 
 # Deletes all data stored on the card
-PD.delete_data()
+## PD.delete_data()
 
 ### TODO ###
+# Allow board to board communication for transferring data amongst themselves to increase range
+# with away from the receiver in which device can function
 # Allow requests before, after, and between timecodes
 # Give option for on device analytics including number of people passing on left/right/total
 # Connect with Make mockup gui including options to switch or add Sensor IDs, find Passes Left/Right/Total
