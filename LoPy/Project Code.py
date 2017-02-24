@@ -41,7 +41,8 @@ class HCSR04:
         self.MAX_DIST = 23200
         self._trigger = Pin(trigger, mode=Pin.OUT, value=0)
         self._echo = Pin(echo, mode=Pin.IN)
-
+	
+	# call to see if person is within threshold distance of sensor
     def distance(self):
         # Hold the trigger pin high for at least 10 us
         self._trigger(1)
