@@ -45,7 +45,7 @@ def createOrLoadModel():
         return tfidf, count
     else:
         print('NEW MODEL')
-        df = pd.read_csv("../../../../Datasets/quora_duplicate_questions.tsv", delimiter='\t')
+        df = pd.read_csv("quora_duplicate_questions.tsv", delimiter='\t')
 
         # encode questions to unicode
         df['question1'] = df['question1'].apply(lambda x: unicode(str(x),"utf-8"))
