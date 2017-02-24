@@ -93,14 +93,14 @@ class Pass_Count:
             self.f.write(str(time.time()) + ',' + self.ident + '0,0,0')
         else:
             print("That's not a valid option! Only 6 sensors!")
-	
-	# call this when person has passed sensor from right
+            
+    # call this when person has passed sensor from right
     def right(self, count):
         # write timecode, time in front of sensors, set right pass value to 1, and set left pass value to 0
         self.f.write(
             "{0},{1},{2},{3},{4}".format(str(time.time()), self.ident, str(count), str(1), str(0)))
-	
-	# call this when person has passed sensor from left
+            
+    # call this when person has passed sensor from left
     def left(self, count):
         # write timecode, time in front of sensors, set right pass value to 0, and set left pass value to 1
         self.f.write(
@@ -140,20 +140,20 @@ class Pass_Count:
             # read a line
             for line in f:
             	if line.split(',')[1] > lower_bound:
-                	# convert data in bytes
-                	data_bytes = bytes(str(line), 'utf-8')
-                	# make the socket blocking
-                	# (waits for the data to be sent and for the 2 receive windows to expire)
-                	nw.s.setblocking(True)
-                	# send some data
-                	nw.s.send(data_bytes)
-                	# make the socket non-blocking
-                	# (because if there's no data received it will block forever...)
-                	nw.s.setblocking(False)
-    		# close the network connection
-    		nw.diconnect()
-        	# close the file
-        	f.close()
+                    # convert data in bytes
+                    data_bytes = bytes(str(line), 'utf-8')
+                    # make the socket blocking
+                    # (waits for the data to be sent and for the 2 receive windows to expire)
+                    nw.s.setblocking(True)
+                    # send some data
+                    nw.s.send(data_bytes)
+                    # make the socket non-blocking
+                    # (because if there's no data received it will block forever...)
+                    nw.s.setblocking(False)
+            # close the network connection
+            nw.diconnect()
+            # close the file
+            f.close()
     
     def send_time_lower(self, upper_bound):
         # setup the networking
@@ -214,21 +214,20 @@ class Pass_Count:
         self.f = open('/sd/' + self.name + '.txt', 'w')
         # write the csv file head
         self.f.write('Timecode,Sensor_ID,Time_Stopped,Right_Pass,Left_Pass')
-		
+
     def __del__(self):
         # close file on exiton exit
         self.f.close()
 
 
-# network interface used to
-
+# network interface used to connect to Lora Network
 class Lora_Network:
     def __init__(self, ident):
         if 1 > int(ident) or 6 < int(ident):
             # ID Switcher based on board number
             # Six boards have been configured for use on the project
             if ident == 1:
-                # Door 1 Identification Strings
+                # Sensor 1 Identification Strings
                 AppEUI = '70 B3 D5 7E F0 00 3A 56'
                 AppID = 'team_dallas'
                 AppKey = 'B9 51 88 C7 6D A9 25 17 57 37 E6 31 DD 32 A8 D4'
@@ -236,7 +235,7 @@ class Lora_Network:
                 DevID = 'teamd1'
 
             elif ident == 2:
-            	# Door 2 Identification Strings
+            	# Sensor 2 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = '90 35 EF A3 C0 42 69 3B F0 D5 02 28 CB D3 DB 24'
@@ -244,7 +243,7 @@ class Lora_Network:
             	DevID = 'teamd2'
 
             elif self.ident == 3:
-            	# Door 3 Identification Strings
+            	# Sensor 3 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = '2F 47 1F 8F 0C AE 19 A1 1A 5B 23 23 63 38 E7 17'
@@ -252,7 +251,7 @@ class Lora_Network:
             	DevID = 'teamd3'
 
             elif self.ident == 4:
-            	# Door 4 Identification Strings
+            	# Sensor 4 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = '01 36 11 39 E6 6A D6 99 91 B9 62 36 B9 7C 07 EE'
@@ -260,7 +259,7 @@ class Lora_Network:
             	DevID = 'teamd4'
 
             elif self.ident == 5:
-            	# Door 5 Identification Strings
+            	# Sensor 5 Identification Strings
             	AppEUI = '70 B3 D5 7E F0 00 3A 56'
             	AppID = 'team_dallas'
             	AppKey = 'F5 5D AF 7A 0E 87 07 37 77 B4 7B 4A D5 FA B1 8D'
@@ -268,12 +267,12 @@ class Lora_Network:
             	DevID = 'teamd5'
 
             else:
-                # Door 6 Identification Strings
+                # Sensor 6 Identification Strings
                 AppEUI = '70 B3 D5 7E F0 00 3A 56'
                 AppID = 'team_dallas'
-            	AppKey = 'BB 93 34 AE 9B FB 8E D5 E3 07 21 7C 63 11 FE 8C'
-            	DevEUI = '70 B3 D5 49 98 C7 B3 68'
-            	DevID = 'teamd6'
+                AppKey = 'BB 93 34 AE 9B FB 8E D5 E3 07 21 7C 63 11 FE 8C'
+                DevEUI = '70 B3 D5 49 98 C7 B3 68'
+                DevID = 'teamd6'
             try:
                 # Initialize LoRa in LORAWAN mode.
                 lora = LoRa(mode=LoRa.LORAWAN)
@@ -327,7 +326,7 @@ class Pass_Detect:
         self.chrono = Timer.Chrono()
         # set light to white
         pycom.rgbled(self.white)
-	
+
 	# Use two ultrasonic sensor and determine which sensor gets activated first and based 
 	# on that value you can determine the number of people in the room.
     def detect_pass(self):
@@ -368,11 +367,11 @@ class Pass_Detect:
                 self.chrono.reset()
                 # set light to white
                 pycom.rgbled(self.white)
-	
+
 	# send all the data stored on card
     def send_data(self):
         self.pc.send_data(self)
-	
+
 	# send all data for waiting values greater than the lower bound
 	def send_gt(self,lower_bound):
 		self.pc.send_data(self,lower_bound)
@@ -417,7 +416,7 @@ PD.send_btw(5,10)
 # Deletes all data stored on the card
 PD.delete_data()
 
-# TODO
+### TODO ###
 # Allow requests before, after, and between timecodes
 # Give option for on device analytics including number of people passing on left/right/total
 # Connect with Make mockup gui including options to switch or add Sensor IDs, find Passes Left/Right/Total
