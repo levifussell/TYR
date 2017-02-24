@@ -69,7 +69,7 @@ void draw()
 
     /*setGradient(50, 90, 540, 80, c1, c2, Y_AXIS);*/
     /*setGradient(50, 190, 540, 80, c2, c1, X_AXIS);*/
-    
+
     //background gradient
     /*for(int i = 0; i < 3; ++i)*/
     /*{*/
@@ -89,7 +89,7 @@ void draw()
 
     /*text("Hello", 20, 20);*/
     /*println("Hello ErrorLog!");*/
-    randCount += 0.0004;
+    randCount += 0.00001;
 
     for(int i = 0; i < numElipses - 1; i++)
     {
@@ -127,16 +127,16 @@ void setGradient(int x, int y, float w, float h, color c1, color c2, int axis ) 
             color c = lerpColor(c1, c2, inter);
                   stroke(c);
                         line(x, i, x+w, i);
-                            
+
         }
-          }  
+          }
             else if (axis == X_AXIS) {  // Left to right gradient
                 for (int i = x; i <= x+w; i++) {
       float inter = map(i, x, x+w, 0, 1);
             color c = lerpColor(c1, c2, inter);
                   stroke(c);
                         line(i, y, i, y+h);
-                            
+
                 }
                   }
 

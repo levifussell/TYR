@@ -23,7 +23,7 @@
         <!--<script type="text/javascript" src="js/mainJS.js"></script>-->
 	</head>
 	<body>
-        <!--<canvas id="myCanvas" resize="true"></canvas>-->
+       <!--<canvas id="myCanvas" resize="true"></canvas>-->
 
 		<div class="header">
 			TIME2TALK
@@ -34,10 +34,25 @@
             <!--Top Queries:-->
         <!--</div>-->
 
-        <div class="leaderboard">
+        <div class="leaderboard" style="padding-left:20px">
             <canvas data-processing-sources="mainPDE.pde"></canvas>
             <div id="overlay">
-                <li><font size="+20"></font></li>
+							<?php
+							$sql = "SELECT text_message, score FROM sorted_texts WHERE score >= 2 ORDER BY score DESC";
+							$result = $conn->query($sql);
+
+							if ($result->num_rows > 0) {
+								 // output data of each row
+								 while($row = $result->fetch_assoc()) {
+										 echo '<div class="fork">';
+										 echo  '<a class="message">'.$row["text_message"]. '</a>'.'<a class="score">' .$row["score"].' <br></a>';
+										 echo  '</div>';
+								 }
+							} else {
+								 echo "Processing data...";
+							}
+							?>
+
 
             </div>
         </div>
@@ -70,6 +85,7 @@
                         <input class="button" type="button" id="button1" value='Send'/>
                     </form>
                 </div>
+
             </div>
 
 		<script type="text/javascript">
