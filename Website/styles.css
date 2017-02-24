@@ -92,6 +92,10 @@ canvas{
   position: fixed;
 }
 
+#__processing0{
+  position: fixed;
+}
+
 
 /*#canvas-wrap canvas{*/
     /*position: absolute;*/
@@ -149,7 +153,9 @@ canvas{
     /*float: right;*/
 }
 /**{border:1px dashed blue;}*/
-
+#fork{
+  overflow-y: scroll;
+}
 
 .cup{
   padding-top: 5px;

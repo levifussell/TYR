@@ -29,7 +29,6 @@
 			TIME2TALK
 			<a class='number'>+441315101477</a>
 		</div>
-		<canvas data-processing-sources="mainPDE.pde"></canvas> 
 
         <!--<div class="leaderboardTitle">-->
             <!--Top Queries:-->
@@ -39,21 +38,21 @@
             <canvas data-processing-sources="mainPDE.pde"></canvas>
             <div id="overlay">
 							<?php
-							$sql = "SELECT text_message, score FROM sorted_texts";
+							$sql = "SELECT text_message, score FROM sorted_texts WHERE score >= 2 ORDER BY score DESC";
 							$result = $conn->query($sql);
 
 							if ($result->num_rows > 0) {
 								 // output data of each row
 								 while($row = $result->fetch_assoc()) {
 										 echo '<div class="fork">';
-										 echo  '<a class="message">'.$row["text_message"]. '</a>'.'<a class="score">' .$row["score"].' </a>';
+										 echo  '<a class="message">'.$row["text_message"]. '</a>'.'<a class="score">' .$row["score"].' <br></a>';
 										 echo  '</div>';
 								 }
 							} else {
-								 echo "0 results";
+								 echo "Processing data...";
 							}
 							?>
-                <li><font size="+20"></font></li>
+
 
             </div>
         </div>

@@ -89,7 +89,7 @@ void draw()
 
     /*text("Hello", 20, 20);*/
     /*println("Hello ErrorLog!");*/
-    randCount += 0.0004;
+    randCount += 0.00001;
 
     for(int i = 0; i < numElipses - 1; i++)
     {
