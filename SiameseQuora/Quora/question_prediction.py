@@ -56,6 +56,7 @@ if os.path.exists('final_tf_idf_vec.h5'):
 			combine_question_vec = np.zeros([combine_question.shape[0],2,300])
 			combine_question_vec[:,0,:] = q3_feats
 
+
 			question_route = []
 			question_list = []
 			score_list = []
@@ -148,6 +149,7 @@ if os.path.exists('final_tf_idf_vec.h5'):
     		 	for j in raw_question_vec[:,0,:]:
     		 		j = np.reshape(j,(1,300))
     		 		pred = model.predict([i,j])
+    		 		print(pred)
     		 		if pred >= 0.5:
     		 			route_list.append(index_j)
     		 		else:
