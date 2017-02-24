@@ -1,10 +1,15 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,200);
 
+html {
+    height: 100%;
+}
+
 body {
     color: #FFF;
 	font: 1.4em/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color:#ccc;
     overflow: hidden;
+    height: 100%;
     margin: 0;
 }
 
@@ -38,41 +43,64 @@ img {
 	float: right;
 	padding-right: 40px;
 }
+
+.big{
+    width:50%;
+    height:80%;
+    float: right;
+    clear: both;
+}
+
+
 .pagewrap{
-    padding: 40px 0px;
+    /*padding: 40px 0px;*/
 	margin: 0 auto;
-	width: 50%;
-    float: left;
+	width: 100%;
+    float: right;
     background-color: #ddd;
-	height:60vh;
-    background-image: url("a.jpg");
-	overflow-y:scroll;
+	height:100%;
+    /*background-image: url("a.jpg");*/
+    overflow-y:scroll;
     display: inline-block;
+    position:relative;
 	/*max-height:750px;	*/
 }
 
-#canvas-wrap canvas{
+.pagewrap canvas, #overlay{
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /*z-index: 0;*/
-    float: right;
 }
 
-#canvas-wrap {
-    position: relative;
-    width: 40%;
-    height: 100%;
-    z-index: 0;
-    float: right;
+.leaderboard canvas, #overlay{
+    position: absolute;
 }
 
-#overlay {
-    position: absolute;
-    height: 100%;
-    /*z-index: 1;*/
+canvas{
+    /*border: 1px solid black;*/
+    clear: both;
+}
+
+
+/*#canvas-wrap canvas{*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*width: 49%;*/
+    /*height: 60vh;*/
+    /*[>z-index: 0;<]*/
+    /*float: right;*/
+/*}*/
+
+/*#canvas-wrap {*/
+    /*position: relative;*/
+    /*width: 40%;*/
+    /*height: 60vh;*/
+    /*float: right;*/
+/*}*/
+
+/*#overlay {*/
+    /*position: absolute;*/
+    /*height: 60vh;*/
+    /*[>z-index: 1;<]*/
 }
 
 
@@ -88,18 +116,21 @@ img {
     /*float: right, top;*/
 /*}*/
 .leaderboard{
-    padding: 40px 10px;
-    margin: 10px 10px;
-    width: 42%;
+    /*padding: 40px 10px;*/
+    /*margin: 10px 10px;*/
+    width: 50%;
     background-color: #ddd;
-    height:400px;
+    height:80%;
     float: right;
+    position: fixed;
+    overflow-y:scroll;
+    display: inline-block;
     /*z-index: 1;*/
     /*[>background-image: url("a.jpg");<]*/
     /*[>overflow-y:scroll;<]*/
     /*float: right;*/
 }
-*{border:1px dashed blue;}
+/**{border:1px dashed blue;}*/
 
 .container {
 	padding: 40px 20px;
@@ -168,11 +199,11 @@ img {
 	border-radius: 20px;
 	box-sizing: border-box;
 	clear: both;
-	float: left;
+	float: right;
 	/*margin-left: 10%;*/
 	padding: 8px 30px;
 	position: relative;
-	width: 40%;
+	width: 87%;
 	max-width: 100%;
 	word-wrap: break-word;
 	height:50px;
