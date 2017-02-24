@@ -27,7 +27,7 @@
 
 		<div class="header">
 			TIME2TALK
-			<a class='number'>+44087668865</a>
+			<a class='number'>+441315101477</a>
 		</div>
 
         <!--<div class="leaderboardTitle">-->
@@ -63,7 +63,7 @@
 									?>
                     </div>
                 </div>
-                <div id ="form">
+                <div class="cup" id ="form">
                     <textarea class='textbox1' name="myTextBox" id="yepyep" >
                     </textarea>
                     <form id="form1">
