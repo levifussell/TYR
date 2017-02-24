@@ -43,8 +43,8 @@ void setup()
     randElipseFill[1] = Math.random() * 255 + 140;
     randElipseSize[2] = Math.random() * 10 - 5;
     randElipseFill[2] = Math.random() * 255 + 140;
-    randElipseDir[0] = [1, 1];
-    randElipseDir[1] = [1, 1];
+    randElipseDir[0] = [1, -1];
+    randElipseDir[1] = [-1, 1];
     randElipseDir[2] = [1, 1];
     for(var i = 3; i < numElipses; ++i)
     {
@@ -55,7 +55,7 @@ void setup()
 
         randElipseSize[i] = Math.random() * 10 - 5;
         randElipseFill[i] = Math.random() * 255;
-        randElipseDir[i] = [Math.round(Math.random() * 2 - 1), Math.round(Math.random() * 2 - 1)];
+        randElipseDir[i] = [Math.round(Math.random() * 2 - 0.1), Math.round(Math.random() * 2 - 1)];
     }
 
 }
@@ -85,7 +85,7 @@ void draw()
     ambientLight(51, 102, 126);
 
     stroke(200, 200);
-    strokeWeight(0.5);
+    strokeWeight(0.8);
 
     /*text("Hello", 20, 20);*/
     /*println("Hello ErrorLog!");*/
@@ -97,8 +97,14 @@ void draw()
         /*float size = dist(mouseX, mouseY, i, j);*/
         /*size = size / max_distance * 66;*/
         randElipseSize[i] = Math.sin(randCount * i) * 5;
-        offsetPosX = (Math.sin(randCount * i) * 20 - 7) * randElipseDir[i][0];
-        offsetPosY = (Math.sin(randCount * i) * 20 - 7) * randElipseDir[i][1];
+        offsetPosX = (Math.sin(randCount * i) * 2 - 1) * randElipseDir[i][0];
+        offsetPosY = (Math.sin(randCount * i) * 2 - 1) * randElipseDir[i][1];
+        randElipses[i][0] = (randElipses[i][0] + offsetPosX) % width;
+        randElipses[i][1] = (randElipses[i][1] + offsetPosY) % height;
+        if(randElipses[i][0] < 0)
+            randElipses[i][0] = width - 1;
+        if(randElipses[i][1] < 0)
+            randElipses[i][1] = height - 1;
         ellipse(randElipses[i][0] + offsetPosX, randElipses[i][1] + offsetPosY, randElipseSize[i], randElipseSize[i]);
         /*line(randElipses[i][0], randElipses[i][1], randElipses[i + 1][0], randElipses[i + 1][1]);*/
 
