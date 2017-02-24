@@ -7,7 +7,7 @@ html {
 body {
     color: #FFF;
 	font: 1.4em/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color:#ccc;
+    background-color:#FFF;
     overflow: hidden;
     height: 100%;
     margin: 0;
@@ -29,15 +29,17 @@ img {
 }
 
 .header{
-	padding: 40px 20px;
+	padding: 10px 20px;
 	margin: 0 auto;
 	width: 100%;
-  height: 5%;
-	color:#00C8FE;
+  height: 3%;
+	color:#FFF;
 	font-size:30px;
-	background-color:#eee;
+	background-color:#3D9BE9;
 	letter-spacing: 0.15em;
 	font: normal normal normal 24px/1.4em din-next-w01-light, din-next-w02-light, din-next-w10-light, sans-serif;
+  border-bottom-style: solid;
+  border-color: blue;
 }
 
 .number{
@@ -52,13 +54,18 @@ img {
     clear: both;
 }
 
+.score{
+color: blue;
+float: right;
+margin-right: 80px;
 
+}
 .pagewrap{
     /*padding: 40px 0px;*/
 	margin: 0 auto;
 	width: 100%;
     float: right;
-    background-color: #ddd;
+
 	height:100%;
     /*background-image: url("a.jpg");*/
     overflow-y:scroll;
@@ -82,7 +89,7 @@ canvas{
 }
 
 #__processing1{
-  position:fixed;
+  position: fixed;
 }
 
 
@@ -103,10 +110,15 @@ canvas{
     /*float: right;*/
 /*}*/
 
-/*#overlay {*/
-    /*position: absolute;*/
-    /*height: 60vh;*/
-    /*[>z-index: 1;<]*/
+#overlay {
+    padding-top: 40px;
+    text-align: center;
+    width: 100%;
+    height:100%;
+}
+
+.fork{
+  font-size: 40px;
 }
 
 
@@ -125,7 +137,7 @@ canvas{
     /*padding: 40px 10px;*/
     /*margin: 10px 10px;*/
     width: 50%;
-    background-color: #ddd;
+
     height:80%;
     float: right;
     position: fixed;
